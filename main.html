@@ -1,0 +1,112 @@
+<html charset="UTF-8">
+    <head>
+        <link rel="stylesheet" href="css.css">
+        <title>KRYZYSOWE</title>
+    </head>
+    <body>
+     <div id="bingo-container"></div> 
+     <div id="centered">
+     <button id="refresh-btn">Odśwież Planszę</button>
+     </div>  
+     <div id="win-modal">
+       
+    </div>
+         <script>
+        // ============================================================
+        // TUTAJ WPISZ SWOJE TEKSTY
+        // Musi być ich przynajmniej 25, aby wypełnić całą planszę.
+        // Jeśli będzie więcej, skrypt wylosuje 25 z tej puli.
+        // ============================================================
+        const textOptions = [
+            '*Cisza*', 'Jedzenie kanapki', '"Przeczytaliście tekst na dzisiaj?"', 'Kryzys odczuwany w duszy', 'Kapitalizm',
+            '3 spóźnionych muszkieterów', 'Sebastian nie dotrwał do końca', 'Kaliściak skanuje 4 rząd', '"Znowu brzydka pogoda się trafiłą"', '"A badania naukowe 🤓☝️"',
+            '"Co myślicie?"', 'Mrozi w sali', '"To by było chyba na tyle"', 'Sprzęt w sali nie działa', 'Teksty do przeczytania na zajęcia',
+            '"Jak się z tym czujecie"', 'Ameryka mentioned', 'Pytania z dupy', '"Czy ktoś jeszcze chce coś powiedzieć?', '"Będziemy dzisiaj w okrojonym składzie?"',
+            'Kaliściak się spóźnia', 'Pytania o eseje', 'Palestyna mentioned', 'Feminizm mentioned', '"Czy to tak jest?"',
+            'Pełny skład prowadzących', 'Kolonializm', 'Sebastian mówi coś mądrego i od razu wychodzi', 'Dawidek wydaje jakieś dziwne dźwięki', 'Kalisciak pyta czy „znacie państwo ten tekst/teorie/ksiazke”', 
+            'Agnieszka zna wspomniany tekst/teorie/ksiazke', '„nikt nie zna tekstu/teorii/ksiazki”', "Afryka mentioned", 
+        ];
+        // ============================================================
+
+       const container = document.getElementById('bingo-container');
+        const refreshBtn = document.getElementById('refresh-btn');
+        let gameActive = true; 
+
+        function shuffleArray(array) {
+            let shuffled = array.slice(); 
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        const winningCombinations = [
+            [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24], // Poziomo
+            [0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24], // Pionowo
+            [0, 6, 12, 18, 24], [4, 8, 12, 16, 20] // Skosy
+        ];
+
+        function checkForWin() {
+            if (!gameActive) return;
+
+            const cells = document.querySelectorAll('.bingo-cell');
+            let hasWon = false;
+
+            for (let combination of winningCombinations) {
+                const isLineComplete = combination.every(index => 
+                    cells[index].classList.contains('selected')
+                );
+
+                if (isLineComplete) {
+                    hasWon = true;
+                    combination.forEach(index => cells[index].classList.add('winner-line'));
+                }
+            }
+
+            if (hasWon) {
+                gameActive = false;
+                
+                // Używamy setTimeout, aby przeglądarka zdążyła pokolorować ostatni kafelek
+                // zanim wyświetli okienko, które "zamraża" ekran.
+                setTimeout(() => {
+                    // Systemowe okienko z pytaniem
+                    let restart = confirm("BINGO! 🎉\nGratulacje, ułożyłeś linię!\n\nKliknij OK, aby wylosować nową planszę.\nKliknij Anuluj, aby zostać tutaj.");
+                    
+                    if (restart) {
+                        generateBoard();
+                    }
+                }, 100); 
+            }
+        }
+
+        function generateBoard() {
+            container.innerHTML = '';
+            gameActive = true;
+
+            if (textOptions.length < 25) {
+                alert("Potrzebujesz co najmniej 25 tekstów!");
+                return;
+            }
+
+            const shuffledOptions = shuffleArray(textOptions).slice(0, 25);
+
+            shuffledOptions.forEach(text => {
+                const cell = document.createElement('div');
+                cell.classList.add('bingo-cell');
+                cell.innerText = text;
+
+                cell.addEventListener('click', () => {
+                    cell.classList.toggle('selected');
+                    checkForWin();
+                });
+
+                container.appendChild(cell);
+            });
+        }
+
+        refreshBtn.addEventListener('click', generateBoard);
+        generateBoard();
+    </script>
+    </body>
+</html>
