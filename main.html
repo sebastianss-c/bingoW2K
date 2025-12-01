@@ -12,11 +12,6 @@
        
     </div>
          <script>
-        // ============================================================
-        // TUTAJ WPISZ SWOJE TEKSTY
-        // Musi być ich przynajmniej 25, aby wypełnić całą planszę.
-        // Jeśli będzie więcej, skrypt wylosuje 25 z tej puli.
-        // ============================================================
         const textOptions = [
             '*Cisza*', 'Jedzenie kanapki', '"Przeczytaliście tekst na dzisiaj?"', 'Kryzys odczuwany w duszy', 'Kapitalizm',
             '3 spóźnionych muszkieterów', 'Sebastian nie dotrwał do końca', 'Kaliściak skanuje 4 rząd', '"Znowu brzydka pogoda się trafiłą"', '"A badania naukowe 🤓☝️"',
@@ -71,7 +66,7 @@
                 // zanim wyświetli okienko, które "zamraża" ekran.
                 setTimeout(() => {
                     // Systemowe okienko z pytaniem
-                    let restart = confirm("BINGO! 🎉\nGratulacje, ułożyłeś linię!\n\nKliknij OK, aby wylosować nową planszę.\nKliknij Anuluj, aby zostać tutaj.");
+                    let restart = confirm("BINGO! 🎉\nGratulacje, uniknąłeś/łaś kryzysu! A przynajmniej na razie... \n\nKliknij OK, aby wylosować nową planszę.\nKliknij Anuluj, aby zostać tutaj.");
                     
                     if (restart) {
                         generateBoard();
@@ -109,4 +104,5 @@
         generateBoard();
     </script>
     </body>
+
 </html>
